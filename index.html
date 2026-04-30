@@ -818,24 +818,25 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwNu-R7anpjGu-MiYga
 function doSubmit() {
   const entry = { ...sel, submittedAt: new Date().toLocaleString('ko-KR') };
 
-  // localStorage 업데이트 (중복 체크용)
+  // localStorage 업데이트
   const responses = getResponses();
   const dupIdx = responses.findIndex(r => r.enName===sel.enName && r.koName===sel.koName);
   if (dupIdx >= 0) { responses[dupIdx] = entry; } else { responses.push(entry); }
   saveResponses(responses);
 
-  // UI 먼저 전환
+  // UI 전환
   closeReview();
   document.getElementById('view-survey').style.display = 'none';
   document.getElementById('view-done').classList.add('active');
   window.scrollTo(0,0);
 
-  // Google Sheets로 전송 (백그라운드)
+  // Google Sheets 전송 — form data 방식 (no-cors 우회)
+  const form = new FormData();
+  form.append('data', JSON.stringify(entry));
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(entry)
+    body: form
   }).catch(err => console.warn('Sheets 전송 실패:', err));
 }
 
