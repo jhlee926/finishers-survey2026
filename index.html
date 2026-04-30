@@ -649,11 +649,9 @@ function goNext() {
   if (!validatePage(currentPage)) return;
   collectPage(currentPage);
 
-  // Page 1 → check for existing entry by name
+  // Page 1 → 동일 이름 기존 응답 확인 (localStorage 기준)
   if (currentPage === 1) {
-    const en = sel.enName;
-    const ko = sel.koName;
-    const existing = getResponses().find(r => r.enName === en && r.koName === ko);
+    const existing = getResponses().find(r => r.enName===sel.enName && r.koName===sel.koName);
     if (existing) {
       openDupOverlay(existing);
       return;
@@ -815,20 +813,30 @@ function closeReview() {
 }
 
 // ── SUBMIT ──
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwNu-R7anpjGu-MiYgaMObNXFinyZ-F2QHnDREr8lD7i-paf11HBAa-rOZTfybrb_ISQ/exec';
+
 function doSubmit() {
+  const entry = { ...sel, submittedAt: new Date().toLocaleString('ko-KR') };
+
+  // localStorage 업데이트 (중복 체크용)
   const responses = getResponses();
   const dupIdx = responses.findIndex(r => r.enName===sel.enName && r.koName===sel.koName);
-  const entry = { ...sel, submittedAt: new Date().toLocaleString('ko-KR') };
-  if (dupIdx >= 0) {
-    responses[dupIdx] = entry; // always overwrite — user came through edit flow
-  } else {
-    responses.push(entry);
-  }
+  if (dupIdx >= 0) { responses[dupIdx] = entry; } else { responses.push(entry); }
   saveResponses(responses);
+
+  // UI 먼저 전환
   closeReview();
   document.getElementById('view-survey').style.display = 'none';
   document.getElementById('view-done').classList.add('active');
   window.scrollTo(0,0);
+
+  // Google Sheets로 전송 (백그라운드)
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(entry)
+  }).catch(err => console.warn('Sheets 전송 실패:', err));
 }
 
 // ── RESET ──
