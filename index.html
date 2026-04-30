@@ -830,14 +830,22 @@ function doSubmit() {
   document.getElementById('view-done').classList.add('active');
   window.scrollTo(0,0);
 
-  // Google Sheets 전송 — form data 방식 (no-cors 우회)
-  const form = new FormData();
-  form.append('data', JSON.stringify(entry));
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: form
-  }).catch(err => console.warn('Sheets 전송 실패:', err));
+  // Google Sheets 전송 — GET 방식 (CORS 완전 우회)
+  const params = new URLSearchParams({
+    enName:      entry.enName,
+    koName:      entry.koName,
+    gender:      entry.gender,
+    singletSize: entry.singletSize,
+    smsg1:       entry.smsg1 || '',
+    smsg2:       entry.smsg2 || '',
+    wbSize:      entry.wbSize,
+    wmsg1:       entry.wmsg1 || '',
+    wmsg2:       entry.wmsg2 || '',
+    submittedAt: entry.submittedAt
+  });
+
+  const img = new Image();
+  img.src = SCRIPT_URL + '?' + params.toString();
 }
 
 // ── RESET ──
