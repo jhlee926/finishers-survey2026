@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>FINISHERS — 단체복 설문</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white:       #ffffff;
+  --off-white:   #f7f7fa;
+  --lavender:    #b3b0d8;
+  --purple:      #7b76c5;
+  --purple-deep: #4a47a3;
+  --yellow:      #e8e000;
+  --yellow-dk:   #c4bc00;
+  --ink:         #1a1a2e;
+  --ink-mid:     #4a4a6a;
+  --ink-light:   #9090b0;
+  --border:      #e0dff0;
+  --input-bg:    #f4f3fc;
+  --error:       #e03060;
+  --font-aptos:  'Aptos','Aptos Display',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --font-ko:     'Noto Sans KR','Apple SD Gothic Neo',sans-serif;
+  --font-en:     'Barlow',var(--font-aptos);
+  --radius:      12px;
+  --radius-sm:   8px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--white);color:var(--ink);font-family:var(--font-ko);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1.5px solid var(--border);padding:0 20px}
+.header-inner{max-width:560px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-text{font-family:var(--font-aptos);font-weight:800;font-size:20px;letter-spacing:0.12em;color:var(--ink);line-height:1}
+.logo-badge{background:var(--yellow);color:var(--ink);font-family:var(--font-en);font-weight:700;font-size:9px;letter-spacing:0.15em;padding:3px 8px;border-radius:2px}
+.header-sub{font-family:var(--font-ko);font-size:11px;color:var(--ink-light);letter-spacing:0.05em}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--purple-deep) 0%,var(--lavender) 65%,#d4d2f0 100%);padding:24px 24px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.08) 1px,transparent 1px);background-size:12px 12px;pointer-events:none}
+.hero-title{font-family:var(--font-aptos);font-weight:800;font-size:clamp(28px,8vw,44px);color:#fff;letter-spacing:0.14em;line-height:1;position:relative}
+.hero-desc{margin-top:7px;font-size:12px;color:rgba(255,255,255,0.82);letter-spacing:0.05em;position:relative;font-weight:300}
+
+/* ── PAGE PROGRESS ── */
+.progress-bar{max-width:560px;margin:0 auto;padding:16px 20px 0}
+.progress-steps{display:flex;align-items:center;gap:0}
+.prog-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative}
+.prog-step:not(:last-child)::after{content:'';position:absolute;top:13px;left:calc(50% + 16px);right:calc(-50% + 16px);height:2px;background:var(--border);z-index:0}
+.prog-step.done:not(:last-child)::after{background:var(--purple-deep)}
+.prog-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-aptos);font-weight:800;font-size:11px;letter-spacing:0;background:var(--off-white);color:var(--ink-light);border:2px solid var(--border);position:relative;z-index:1;transition:all .25s}
+.prog-step.active .prog-dot{background:var(--purple-deep);color:#fff;border-color:var(--purple-deep)}
+.prog-step.done .prog-dot{background:var(--purple-deep);color:#fff;border-color:var(--purple-deep)}
+.prog-step.done .prog-dot::after{content:'✓';font-size:12px}
+.prog-step.done .prog-num{display:none}
+.prog-label{font-size:9px;font-family:var(--font-ko);color:var(--ink-light);letter-spacing:0.05em;text-align:center;white-space:nowrap}
+.prog-step.active .prog-label{color:var(--purple-deep);font-weight:700}
+.prog-step.done .prog-label{color:var(--purple)}
+
+/* ── PAGE VIEWS ── */
+.page-view{display:none;animation:fadeUp .3s ease}
+.page-view.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FORM WRAP ── */
+.form-wrap{max-width:560px;margin:0 auto;padding:20px 20px 100px;display:flex;flex-direction:column;gap:20px}
+
+/* ── QUESTION CARD ── */
+.q-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 20px 22px;transition:border-color .2s,box-shadow .2s}
+.q-card:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(123,118,197,.12)}
+.q-num{font-family:var(--font-aptos);font-weight:700;font-size:10px;letter-spacing:0.25em;color:var(--purple);text-transform:uppercase;margin-bottom:4px}
+.q-title{font-family:var(--font-ko);font-weight:700;font-size:16px;color:var(--ink);margin-bottom:4px;line-height:1.4}
+.q-hint{font-size:11px;color:var(--ink-light);margin-bottom:16px;line-height:1.6;font-weight:300}
+
+/* ── TEXT INPUT ── */
+.text-input{width:100%;background:var(--input-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--ink);font-family:var(--font-aptos);font-size:16px;font-weight:600;letter-spacing:0.04em;padding:13px 16px;outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none;appearance:none}
+.text-input.ko-input{font-family:var(--font-ko);font-weight:500;letter-spacing:0.02em}
+.text-input:focus{border-color:var(--purple);background:#f0effe}
+.text-input::placeholder{color:var(--ink-light);font-weight:400}
+.char-counter{text-align:right;font-size:10px;font-family:var(--font-aptos);color:var(--ink-light);margin-top:5px;letter-spacing:0.1em;transition:color .2s}
+.char-counter.over{color:var(--error)}
+
+/* ── GENDER ── */
+.gender-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg-btn{background:var(--input-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 10px;cursor:pointer;text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:5px}
+.seg-btn .seg-icon{font-size:22px;line-height:1}
+.seg-btn .seg-label{font-family:var(--font-aptos);font-weight:700;font-size:12px;letter-spacing:0.12em;color:var(--ink-mid);text-transform:uppercase}
+.seg-btn.selected{background:var(--purple-deep);border-color:var(--purple-deep)}
+.seg-btn.selected .seg-label{color:#fff}
+
+/* ── SIZE ── */
+.size-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.size-check-btn{background:transparent;border:1.5px solid var(--purple);border-radius:20px;color:var(--purple);font-family:var(--font-ko);font-size:11px;font-weight:500;padding:5px 14px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap}
+.size-check-btn:hover{background:var(--purple);color:#fff}
+.size-check-btn svg{width:13px;height:13px;flex-shrink:0}
+.size-note{font-size:11px;color:var(--ink-mid);font-weight:300;margin-bottom:14px;line-height:1.5;padding:8px 12px;background:#fff8e0;border-left:3px solid var(--yellow-dk);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.size-grid{display:grid;gap:8px}
+.size-grid-5{grid-template-columns:repeat(5,1fr)}
+.size-grid-4{grid-template-columns:repeat(4,1fr)}
+.size-grid-3{grid-template-columns:repeat(3,1fr)}
+.size-btn{background:var(--input-bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--ink-mid);font-family:var(--font-aptos);font-weight:800;font-size:14px;letter-spacing:0.06em;padding:14px 6px;cursor:pointer;text-align:center;transition:all .2s}
+.size-btn:active{transform:scale(.96)}
+.size-btn.selected{background:var(--purple-deep);border-color:var(--purple-deep);color:#fff}
+
+/* ── MESSAGE ── */
+.msg-rules{background:var(--off-white);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;font-size:11px;color:var(--ink-mid);line-height:1.8;font-weight:300}
+.msg-rules strong{color:var(--purple-deep);font-weight:700}
+.msg-line-wrap{margin-bottom:14px}
+.msg-line-label{font-size:11px;color:var(--ink-mid);font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.line-badge{background:var(--lavender);color:var(--purple-deep);font-family:var(--font-aptos);font-weight:700;font-size:9px;padding:2px 7px;border-radius:10px;letter-spacing:0.1em}
+
+/* ── PREVIEW ── */
+.singlet-preview-box{background:linear-gradient(160deg,#f0effe 0%,#e8e7f8 100%);border-radius:var(--radius);padding:16px;margin-top:14px;text-align:center}
+.preview-label{font-family:var(--font-aptos);font-weight:700;font-size:9px;letter-spacing:0.25em;color:var(--purple);text-transform:uppercase;margin-bottom:10px}
+.singlet-svg-wrap{position:relative;display:inline-block;width:170px;height:221px}
+.singlet-svg-wrap svg{width:100%;height:100%;display:block}
+
+/* ── ERROR ── */
+.field-err{font-size:11px;color:var(--error);margin-top:6px;font-weight:500;min-height:16px;display:flex;align-items:center;gap:4px}
+.field-err::before{content:'!';display:inline-block;background:var(--error);color:#fff;width:14px;height:14px;border-radius:50%;font-size:9px;font-weight:900;text-align:center;line-height:14px;flex-shrink:0}
+.field-err:empty{display:none}
+
+/* ── NAV BUTTONS ── */
+.nav-cta{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:14px 20px max(14px,env(safe-area-inset-bottom));border-top:1.5px solid var(--border);z-index:40}
+.nav-inner{max-width:560px;margin:0 auto;display:flex;gap:10px}
+.btn-prev{flex:0 0 52px;background:var(--off-white);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--ink-mid);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.btn-prev:hover{border-color:var(--purple);color:var(--purple)}
+.btn-next{flex:1;background:var(--purple-deep);border:none;border-radius:var(--radius);color:#fff;font-family:var(--font-aptos);font-weight:800;font-size:16px;letter-spacing:0.08em;padding:15px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.btn-next:active{background:var(--purple);transform:scale(.99)}
+
+/* ── REVIEW OVERLAY ── */
+.overlay{position:fixed;inset:0;z-index:80;display:none;align-items:flex-end}
+.overlay.open{display:flex}
+.overlay-backdrop{position:absolute;inset:0;background:rgba(26,26,46,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.overlay-sheet{position:relative;width:100%;max-width:560px;margin:0 auto;background:#fff;border-radius:24px 24px 0 0;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:slideUp .3s cubic-bezier(.25,.8,.25,1);padding-bottom:max(28px,env(safe-area-inset-bottom))}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+.sheet-head{padding:20px 24px 16px;border-bottom:1.5px solid var(--border);position:sticky;top:0;background:#fff;z-index:2}
+.sheet-title{font-family:var(--font-aptos);font-weight:800;font-size:22px;letter-spacing:0.04em;color:var(--ink)}
+.sheet-subtitle{font-size:12px;color:var(--ink-light);margin-top:3px;font-weight:300}
+.review-body{padding:20px 24px}
+
+/* review sections */
+.review-section-title{font-family:var(--font-aptos);font-weight:800;font-size:11px;letter-spacing:0.2em;color:var(--purple-deep);text-transform:uppercase;margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--border)}
+.review-section-title:first-child{margin-top:0}
+.review-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--off-white);gap:16px}
+.review-row:last-child{border-bottom:none}
+.rv-key{font-size:12px;color:var(--ink-light);font-weight:400;flex-shrink:0}
+.rv-val{font-family:var(--font-ko);font-weight:700;font-size:15px;color:var(--ink);text-align:right;word-break:break-all}
+.rv-val.en{font-family:var(--font-aptos);font-weight:800;letter-spacing:0.04em}
+.rv-val.tag{background:var(--purple-deep);color:#fff;font-family:var(--font-aptos);font-weight:800;font-size:13px;padding:3px 13px;border-radius:20px;letter-spacing:0.06em}
+.rv-val.gtag{background:var(--lavender);color:var(--purple-deep);font-weight:700;font-size:13px;padding:3px 13px;border-radius:20px}
+.rv-msg{background:var(--input-bg);border-left:3px solid var(--purple);padding:7px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-family:var(--font-ko);font-weight:700;font-size:13px;text-align:right;flex:1}
+.rv-none{color:var(--ink-light);font-size:12px;font-weight:300;font-style:italic}
+.sheet-actions{padding:16px 24px 4px;display:flex;gap:10px}
+.btn-edit{flex:1;background:var(--off-white);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--ink-mid);font-family:var(--font-aptos);font-weight:700;font-size:15px;letter-spacing:0.06em;padding:14px;cursor:pointer;transition:all .2s}
+.btn-submit{flex:2;background:var(--yellow);border:none;border-radius:var(--radius);color:var(--ink);font-family:var(--font-aptos);font-weight:900;font-size:17px;letter-spacing:0.06em;padding:14px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.btn-submit:active{background:var(--yellow-dk);transform:scale(.98)}
+
+/* ── SIZE CHART MODAL ── */
+.size-modal{position:fixed;inset:0;z-index:90;display:none;align-items:flex-end}
+.size-modal.open{display:flex}
+.size-modal-sheet{position:relative;width:100%;max-width:560px;margin:0 auto;background:#fff;border-radius:24px 24px 0 0;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:slideUp .3s cubic-bezier(.25,.8,.25,1);padding-bottom:max(24px,env(safe-area-inset-bottom))}
+.modal-head{padding:18px 24px 14px;border-bottom:1.5px solid var(--border);position:sticky;top:0;background:#fff;z-index:2;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:var(--font-aptos);font-weight:800;font-size:20px;letter-spacing:0.04em;color:var(--ink)}
+.modal-close{width:32px;height:32px;background:var(--off-white);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--ink-mid);transition:background .2s}
+.modal-close:hover{background:var(--border)}
+.modal-body{padding:18px 20px}
+.size-table-section{margin-bottom:22px}
+.table-section-label{font-family:var(--font-ko);font-weight:700;font-size:13px;color:var(--purple-deep);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.table-section-label::after{content:'';flex:1;height:1.5px;background:var(--border)}
+.size-table-note{font-size:10px;color:var(--ink-light);text-align:right;margin-top:5px;font-family:var(--font-ko);font-weight:300}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{background:var(--purple-deep);color:#fff}
+thead th{padding:9px 6px;font-family:var(--font-ko);font-weight:700;letter-spacing:0.03em;text-align:center;font-size:11px}
+thead th:first-child{border-radius:var(--radius-sm) 0 0 0}
+thead th:last-child{border-radius:0 var(--radius-sm) 0 0}
+tbody tr:nth-child(even){background:var(--off-white)}
+tbody tr:hover{background:#ebe9fc}
+tbody td{padding:9px 6px;text-align:center;color:var(--ink);font-family:var(--font-aptos);font-weight:600;font-size:12px}
+tbody td:first-child{font-weight:900;color:var(--purple-deep);font-size:13px;letter-spacing:0.04em}
+.table-tip{font-size:10px;color:var(--ink-light);line-height:1.7;margin-top:10px;padding:8px 12px;background:#fff8e0;border-left:3px solid var(--yellow-dk);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+
+/* ── DONE ── */
+#view-done{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:60px 24px}
+#view-done.active{display:flex}
+.done-icon-wrap{width:90px;height:90px;background:linear-gradient(135deg,var(--purple-deep),var(--lavender));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto 24px;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.done-title{font-family:var(--font-aptos);font-weight:800;font-size:40px;color:var(--ink);letter-spacing:0.06em;margin-bottom:10px}
+.done-title em{color:var(--purple-deep)}
+.done-msg{font-size:14px;color:var(--ink-light);line-height:1.8;font-weight:300;max-width:280px;margin:0 auto 32px}
+.btn-again{background:transparent;border:2px solid var(--purple-deep);border-radius:var(--radius);color:var(--purple-deep);font-family:var(--font-aptos);font-weight:700;font-size:14px;letter-spacing:0.1em;padding:12px 28px;cursor:pointer;text-transform:uppercase;transition:all .2s}
+.btn-again:hover{background:var(--purple-deep);color:#fff}
+
+/* ── ADMIN ── */
+.admin-trigger{text-align:center;padding:24px 24px 8px}
+.btn-admin-link{font-size:11px;color:var(--ink-light);font-family:var(--font-ko);font-weight:300;background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.admin-overlay{position:fixed;inset:0;z-index:95;display:none;align-items:flex-end}
+.admin-overlay.open{display:flex}
+.admin-sheet{position:relative;width:100%;max-width:560px;margin:0 auto;background:#fff;border-radius:24px 24px 0 0;max-height:94vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:slideUp .3s cubic-bezier(.25,.8,.25,1);padding-bottom:max(24px,env(safe-area-inset-bottom))}
+.admin-list{padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.admin-card{background:var(--off-white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;position:relative}
+.ac-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.ac-name{font-family:var(--font-aptos);font-weight:800;font-size:16px;color:var(--ink);letter-spacing:0.04em}
+.ac-name-ko{font-family:var(--font-ko);font-weight:400;font-size:12px;color:var(--ink-light);margin-left:6px}
+.ac-tags{display:flex;gap:5px;flex-wrap:wrap}
+.ac-tag{font-family:var(--font-aptos);font-weight:700;font-size:9px;letter-spacing:0.1em;padding:2px 8px;border-radius:10px;background:var(--purple-deep);color:#fff}
+.ac-tag.wb{background:var(--lavender);color:var(--purple-deep)}
+.ac-row{font-size:11px;color:var(--ink-mid);font-weight:300;margin-top:4px;line-height:1.6}
+.ac-row span{color:var(--ink);font-weight:600}
+.ac-del{position:absolute;top:10px;right:10px;background:none;border:none;font-size:14px;color:var(--ink-light);cursor:pointer;padding:4px;transition:color .2s}
+.ac-del:hover{color:var(--error)}
+.admin-actions-bar{padding:12px 20px;display:flex;gap:10px;border-top:1.5px solid var(--border);position:sticky;bottom:0;background:#fff}
+.btn-xl-dl{flex:1;background:var(--purple-deep);border:none;border-radius:var(--radius-sm);color:#fff;font-family:var(--font-aptos);font-weight:800;font-size:13px;letter-spacing:0.08em;padding:13px;cursor:pointer;text-transform:uppercase;transition:background .2s}
+.btn-xl-dl:hover{background:var(--purple)}
+.btn-clear{background:transparent;border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--ink-light);font-family:var(--font-ko);font-size:12px;padding:10px 16px;cursor:pointer;white-space:nowrap}
+.empty-admin{text-align:center;padding:40px 20px;font-size:13px;color:var(--ink-light);font-weight:300;line-height:2}
+.gate-body{padding:32px 24px}
+.gate-desc{font-size:12px;color:var(--ink-light);margin-bottom:16px;font-weight:300}
+.gate-input{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--input-bg);font-family:var(--font-aptos);font-size:20px;font-weight:600;letter-spacing:0.3em;text-align:center;padding:14px;outline:none;-webkit-appearance:none;color:var(--ink);transition:border-color .2s}
+.gate-input:focus{border-color:var(--purple)}
+.btn-gate{width:100%;margin-top:10px;background:var(--purple-deep);border:none;border-radius:var(--radius-sm);color:#fff;font-family:var(--font-aptos);font-weight:800;font-size:16px;letter-spacing:0.1em;padding:14px;cursor:pointer;text-transform:uppercase;transition:background .2s}
+.gate-err{color:var(--error);font-size:11px;margin-top:8px;font-weight:500;min-height:16px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:#fff;font-family:var(--font-ko);font-size:12px;font-weight:500;padding:10px 22px;border-radius:30px;opacity:0;pointer-events:none;transition:all .3s;z-index:200;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ════ SURVEY WRAPPER ════ -->
+<div id="view-survey">
+
+  <header>
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <span class="logo-text">FINISHERS</span>
+        <div class="logo-badge">2025</div>
+      </div>
+      <div class="header-sub">단체복 설문</div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-title">FINISHERS</div>
+    <div class="hero-desc">단체복 제작을 위한 개인 정보를 입력해주세요</div>
+  </div>
+
+  <!-- Progress indicator -->
+  <div class="progress-bar">
+    <div class="progress-steps">
+      <div class="prog-step active" id="prog-1">
+        <div class="prog-dot"><span class="prog-num">1</span></div>
+        <div class="prog-label">이름</div>
+      </div>
+      <div class="prog-step" id="prog-2">
+        <div class="prog-dot"><span class="prog-num">2</span></div>
+        <div class="prog-label">싱글렛</div>
+      </div>
+      <div class="prog-step" id="prog-3">
+        <div class="prog-dot"><span class="prog-num">3</span></div>
+        <div class="prog-label">바람막이</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGE 1: 이름 ── -->
+  <div class="page-view active" id="page-1">
+    <form class="form-wrap" onsubmit="return false" novalidate>
+
+      <div class="q-card">
+        <div class="q-num">Q 01</div>
+        <div class="q-title">영문 이름</div>
+        <div class="q-hint">회사에서 사용하는 영문 이름을 기재해주세요. 대문자로 자동 변환됩니다.</div>
+        <input class="text-input" type="text" id="f-en"
+          placeholder="e.g. ZOEY KIM" maxlength="30"
+          autocomplete="name" autocorrect="off" autocapitalize="characters" spellcheck="false"
+          oninput="this.value=this.value.toUpperCase()">
+        <div class="field-err" id="err-en"></div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-num">Q 02</div>
+        <div class="q-title">국문 이름</div>
+        <div class="q-hint">성함을 한국어로 입력해주세요.</div>
+        <input class="text-input ko-input" type="text" id="f-ko"
+          placeholder="예) 김지영" maxlength="10"
+          autocomplete="name" autocorrect="off" spellcheck="false">
+        <div class="field-err" id="err-ko"></div>
+      </div>
+
+      <div class="admin-trigger">
+        <button type="button" class="btn-admin-link" onclick="openAdmin()">관리자 페이지</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ── PAGE 2: 싱글렛 ── -->
+  <div class="page-view" id="page-2">
+    <form class="form-wrap" onsubmit="return false" novalidate>
+
+      <!-- 성별 -->
+      <div class="q-card">
+        <div class="q-num">Q 03</div>
+        <div class="q-title">성별</div>
+        <div class="q-hint">사이즈 기준이 됩니다. 의류 사이즈 기준으로 선택해주세요.</div>
+        <div class="gender-row">
+          <button type="button" class="seg-btn" id="g-M" onclick="selectGender('M')">
+            <span class="seg-icon">♂</span>
+            <span class="seg-label">남성 / Male</span>
+          </button>
+          <button type="button" class="seg-btn" id="g-F" onclick="selectGender('F')">
+            <span class="seg-icon">♀</span>
+            <span class="seg-label">여성 / Female</span>
+          </button>
+        </div>
+        <div class="field-err" id="err-gender"></div>
+      </div>
+
+      <!-- 싱글렛 사이즈 -->
+      <div class="q-card">
+        <div class="q-num">Q 04</div>
+        <div class="q-title">싱글렛 사이즈</div>
+        <div class="size-header">
+          <div></div>
+          <button type="button" class="size-check-btn" onclick="openSizeModal('singlet')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <rect x="2" y="3" width="12" height="10" rx="1.5"/><line x1="5" y1="7" x2="11" y2="7"/><line x1="5" y1="10" x2="9" y2="10"/>
+            </svg>
+            사이즈 확인
+          </button>
+        </div>
+        <div class="size-note">🏃 러닝 싱글렛은 일반 의류보다 핏이 타이트합니다. 평소보다 <strong>한 사이즈 업</strong>을 권장합니다.</div>
+        <div class="size-grid" id="singletSizeGrid"></div>
+        <div class="field-err" id="err-singlet-size"></div>
+      </div>
+
+      <!-- 싱글렛 문구 -->
+      <div class="q-card">
+        <div class="q-num">Q 05</div>
+        <div class="q-title">싱글렛 개인 문구 <span style="color:var(--ink-light);font-weight:300;font-size:13px">(선택)</span></div>
+        <div class="msg-rules">
+          싱글렛 뒷면 하단에 새겨질 나만의 문구입니다.<br>
+          <strong>한글</strong> 1줄 최대 7자 &nbsp;·&nbsp; <strong>영문</strong> 1줄 최대 15자<br>
+          최대 2줄 · 미입력 시 생략
+        </div>
+        <div class="msg-line-wrap">
+          <div class="msg-line-label"><span class="line-badge">LINE 1</span>첫 번째 줄</div>
+          <input class="text-input ko-input" type="text" id="f-smsg1"
+            placeholder="예) 완주가 목표 / JUST FINISH IT"
+            maxlength="15" autocorrect="off" spellcheck="false"
+            oninput="onMsgInput(this,'smsg1','scc1')" onfocus="updatePreview()">
+          <div class="char-counter" id="scc1">0 / 15</div>
+          <div class="field-err" id="err-smsg1"></div>
+        </div>
+        <div class="msg-line-wrap">
+          <div class="msg-line-label"><span class="line-badge">LINE 2</span>두 번째 줄</div>
+          <input class="text-input ko-input" type="text" id="f-smsg2"
+            placeholder="예) 피니셔스 / FINISHERS"
+            maxlength="15" autocorrect="off" spellcheck="false"
+            oninput="onMsgInput(this,'smsg2','scc2')" onfocus="updatePreview()">
+          <div class="char-counter" id="scc2">0 / 15</div>
+          <div class="field-err" id="err-smsg2"></div>
+        </div>
+
+        <!-- Singlet Preview -->
+        <div class="singlet-preview-box">
+          <div class="preview-label">Preview</div>
+          <div class="singlet-svg-wrap">
+            <svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+              <defs>
+                <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="50%" stop-color="#d8d6f0"/>
+                  <stop offset="100%" stop-color="#9b98cc"/>
+                </linearGradient>
+                <pattern id="htDots" x="0" y="0" width="5" height="5" patternUnits="userSpaceOnUse">
+                  <circle cx="2.5" cy="2.5" r="0.9" fill="rgba(255,255,255,0.6)"/>
+                </pattern>
+                <linearGradient id="dotFadeG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="black" stop-opacity="0"/>
+                  <stop offset="35%" stop-color="black" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="black" stop-opacity="1"/>
+                </linearGradient>
+                <mask id="dotFadeM"><rect width="200" height="260" fill="url(#dotFadeG)"/></mask>
+                <clipPath id="sClip">
+                  <path d="M72,6 C82,2 118,2 128,6 L172,18 C178,22 180,34 174,44 L162,62 L162,228 C162,234 158,238 152,238 L48,238 C42,238 38,234 38,228 L38,62 L26,44 C20,34 22,22 28,18 Z"/>
+                </clipPath>
+              </defs>
+              <path d="M72,6 C82,2 118,2 128,6 L172,18 C178,22 180,34 174,44 L162,62 L162,228 C162,234 158,238 152,238 L48,238 C42,238 38,234 38,228 L38,62 L26,44 C20,34 22,22 28,18 Z" fill="url(#bodyG)" stroke="#c8c5e8" stroke-width="1.2"/>
+              <g clip-path="url(#sClip)"><rect width="200" height="260" fill="url(#htDots)" mask="url(#dotFadeM)"/></g>
+              <path d="M38,62 L38,238 L58,238 L58,68 Z" fill="rgba(90,85,170,0.07)" clip-path="url(#sClip)"/>
+              <path d="M162,62 L162,238 L142,238 L142,68 Z" fill="rgba(90,85,170,0.07)" clip-path="url(#sClip)"/>
+              <path d="M72,6 C82,2 118,2 128,6" fill="none" stroke="rgba(150,145,210,0.5)" stroke-width="3" stroke-linecap="round"/>
+              <text x="100" y="30" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="6.5" fill="#8a86c8" letter-spacing="1.5" opacity="0.8">LEPLUS.</text>
+              <g transform="translate(100,44)">
+                <text text-anchor="middle" font-family="Barlow,sans-serif" font-weight="900" font-size="8.5" letter-spacing="0.5" fill="#1a1a2e" opacity="0.35" x="1" y="1" writing-mode="tb">FINISHERS</text>
+                <text text-anchor="middle" font-family="Barlow,sans-serif" font-weight="900" font-size="8.5" letter-spacing="0.5" fill="#e8e000" x="0" y="0" writing-mode="tb">FINISHERS</text>
+              </g>
+              <line x1="60" y1="152" x2="140" y2="152" stroke="rgba(123,118,197,0.25)" stroke-width="0.8"/>
+              <text id="prev1" x="100" y="168" text-anchor="middle" font-family="'Noto Sans KR',Barlow,sans-serif" font-weight="700" font-size="9.5" letter-spacing="0.3" fill="#1a1a2e">—</text>
+              <text id="prev2" x="100" y="182" text-anchor="middle" font-family="'Noto Sans KR',Barlow,sans-serif" font-weight="700" font-size="9.5" letter-spacing="0.3" fill="#4a47a3"></text>
+              <text x="100" y="250" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="600" font-size="5" fill="#9090b0" letter-spacing="2.5">S  M  L  XL  XXL</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ── PAGE 3: 바람막이 ── -->
+  <div class="page-view" id="page-3">
+    <form class="form-wrap" onsubmit="return false" novalidate>
+
+      <!-- 바람막이 사이즈 -->
+      <div class="q-card">
+        <div class="q-num">Q 06</div>
+        <div class="q-title">바람막이 사이즈</div>
+        <div class="size-header">
+          <div></div>
+          <button type="button" class="size-check-btn" onclick="openSizeModal('wb')">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <rect x="2" y="3" width="12" height="10" rx="1.5"/><line x1="5" y1="7" x2="11" y2="7"/><line x1="5" y1="10" x2="9" y2="10"/>
+            </svg>
+            사이즈 확인
+          </button>
+        </div>
+        <div class="size-note">🧥 단면 CM / 1CM 오차 있을 수 있습니다.</div>
+        <div class="size-grid size-grid-5" id="wbSizeGrid">
+          <button type="button" class="size-btn" onclick="selectWbSize('XS')">XS</button>
+          <button type="button" class="size-btn" onclick="selectWbSize('S')">S</button>
+          <button type="button" class="size-btn" onclick="selectWbSize('M')">M</button>
+          <button type="button" class="size-btn" onclick="selectWbSize('L')">L</button>
+          <button type="button" class="size-btn" onclick="selectWbSize('XL')">XL</button>
+        </div>
+        <div class="field-err" id="err-wb-size"></div>
+      </div>
+
+      <!-- 바람막이 문구 -->
+      <div class="q-card">
+        <div class="q-num">Q 07</div>
+        <div class="q-title">바람막이 개인 문구 <span style="color:var(--ink-light);font-weight:300;font-size:13px">(선택)</span></div>
+        <div class="msg-rules">
+          바람막이에 새겨질 나만의 문구입니다.<br>
+          <strong>한글</strong> 1줄 최대 7자 &nbsp;·&nbsp; <strong>영문</strong> 1줄 최대 15자<br>
+          최대 2줄 · 미입력 시 생략
+        </div>
+        <div class="msg-line-wrap">
+          <div class="msg-line-label"><span class="line-badge">LINE 1</span>첫 번째 줄</div>
+          <input class="text-input ko-input" type="text" id="f-wmsg1"
+            placeholder="예) 완주가 목표 / JUST FINISH IT"
+            maxlength="15" autocorrect="off" spellcheck="false"
+            oninput="onMsgInput(this,'wmsg1','wcc1')">
+          <div class="char-counter" id="wcc1">0 / 15</div>
+          <div class="field-err" id="err-wmsg1"></div>
+        </div>
+        <div class="msg-line-wrap">
+          <div class="msg-line-label"><span class="line-badge">LINE 2</span>두 번째 줄</div>
+          <input class="text-input ko-input" type="text" id="f-wmsg2"
+            placeholder="예) 피니셔스 / FINISHERS"
+            maxlength="15" autocorrect="off" spellcheck="false"
+            oninput="onMsgInput(this,'wmsg2','wcc2')">
+          <div class="char-counter" id="wcc2">0 / 15</div>
+          <div class="field-err" id="err-wmsg2"></div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Fixed nav buttons -->
+  <div class="nav-cta">
+    <div class="nav-inner">
+      <button class="btn-prev" id="btnPrev" onclick="goPrev()" style="display:none">←</button>
+      <button class="btn-next" id="btnNext" onclick="goNext()">다음 →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════ DONE ════ -->
+<div id="view-done">
+  <div class="done-icon-wrap">🏅</div>
+  <div class="done-title">FINISH<em>ED</em>!</div>
+  <div class="done-msg">설문이 성공적으로 제출되었습니다.<br>FINISHERS와 함께 달려요! 🏃‍♀️🏃</div>
+  <button class="btn-again" onclick="resetAll()">다른 회원 등록하기</button>
+</div>
+
+<!-- ════ REVIEW OVERLAY ════ -->
+<div class="overlay" id="reviewOverlay">
+  <div class="overlay-backdrop" onclick="closeReview()"></div>
+  <div class="overlay-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">내용 확인</div>
+      <div class="sheet-subtitle">아래 정보가 맞는지 확인 후 제출해주세요</div>
+    </div>
+    <div class="review-body" id="reviewBody"></div>
+    <div class="sheet-actions">
+      <button class="btn-edit" onclick="closeReview()">✏ 수정</button>
+      <button class="btn-submit" onclick="doSubmit()">Submit ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SIZE MODAL ════ -->
+<div class="size-modal" id="sizeModal">
+  <div class="overlay-backdrop" onclick="closeSizeModal()"></div>
+  <div class="size-modal-sheet">
+    <div class="sheet-handle"></div>
+    <div class="modal-head">
+      <div class="modal-title" id="sizeModalTitle">사이즈 가이드</div>
+      <button class="modal-close" onclick="closeSizeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="sizeModalBody"></div>
+  </div>
+</div>
+
+<!-- ════ ADMIN OVERLAY ════ -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="overlay-backdrop" onclick="closeAdmin()"></div>
+  <div class="admin-sheet">
+    <div class="sheet-handle"></div>
+    <div class="modal-head">
+      <div class="modal-title">관리자</div>
+      <button class="modal-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div id="adminGate">
+      <div class="gate-body">
+        <div class="gate-desc">관리자 비밀번호를 입력하세요.</div>
+        <input class="gate-input" type="password" id="adminPw" maxlength="10" placeholder="••••"
+          onkeydown="if(event.key==='Enter')checkAdmin()">
+        <button class="btn-gate" onclick="checkAdmin()">확인</button>
+        <div class="gate-err" id="gateErr"></div>
+      </div>
+    </div>
+    <div id="adminPanel" style="display:none">
+      <div class="admin-list" id="adminList"></div>
+      <div class="admin-actions-bar">
+        <button class="btn-clear" onclick="clearAllData()">전체 삭제</button>
+        <button class="btn-xl-dl" onclick="exportXlsx()">📥 Excel 다운로드</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ════ DUPLICATE CHECK POPUP ════ -->
+<div class="overlay" id="dupOverlay">
+  <div class="overlay-backdrop"></div>
+  <div class="overlay-sheet" style="border-radius:20px;max-height:auto;padding-bottom:max(28px,env(safe-area-inset-bottom))">
+    <div style="padding:32px 28px 24px;text-align:center">
+      <div style="font-size:36px;margin-bottom:16px">🔍</div>
+      <div style="font-family:var(--font-aptos);font-weight:800;font-size:20px;color:var(--ink);margin-bottom:10px;letter-spacing:0.04em">기존 신청 내역 발견</div>
+      <div style="font-size:13px;color:var(--ink-light);line-height:1.8;font-weight:300;margin-bottom:28px">신청하신 내용을 확인 또는 수정하시겠습니까?</div>
+      <div style="display:flex;gap:10px">
+        <button onclick="dupAction('view')" style="flex:1;background:var(--off-white);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--ink-mid);font-family:var(--font-aptos);font-weight:700;font-size:15px;padding:14px;cursor:pointer;letter-spacing:0.04em">확인</button>
+        <button onclick="dupAction('edit')" style="flex:1;background:var(--purple-deep);border:none;border-radius:var(--radius);color:#fff;font-family:var(--font-aptos);font-weight:800;font-size:15px;padding:14px;cursor:pointer;letter-spacing:0.06em">수정</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ VIEW EXISTING OVERLAY ════ -->
+<div class="overlay" id="viewExistingOverlay">
+  <div class="overlay-backdrop" onclick="closeViewExisting()"></div>
+  <div class="overlay-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">나의 신청 내역</div>
+      <div class="sheet-subtitle">현재 접수된 정보입니다</div>
+    </div>
+    <div class="review-body" id="viewExistingBody"></div>
+    <div class="sheet-actions">
+      <button class="btn-edit" onclick="closeViewExisting()">닫기</button>
+      <button class="btn-submit" style="background:var(--purple-deep);color:#fff" onclick="startEditFromView()">✏ 수정하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTS ──
+const ADMIN_PW   = 'finish25';
+const STORAGE_KEY = 'finishers_v3';
+
+// ── STATE ──
+let currentPage = 1;
+let adminUnlocked = false;
+const sel = { enName:'', koName:'', gender:'', singletSize:'', smsg1:'', smsg2:'', wbSize:'', wmsg1:'', wmsg2:'' };
+
+const SIZES_M = ['S','M','L','XL','XXL'];
+const SIZES_F = ['S','M','L'];
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  renderSingletGrid(null);
+  document.getElementById('f-smsg1').addEventListener('input', updatePreview);
+  document.getElementById('f-smsg2').addEventListener('input', updatePreview);
+  updateNav();
+});
+
+// ── PAGE NAV ──
+function updateNav() {
+  const prev = document.getElementById('btnPrev');
+  const next = document.getElementById('btnNext');
+  prev.style.display = currentPage === 1 ? 'none' : 'flex';
+  if (currentPage === 3) {
+    next.textContent = 'Complete & Review →';
+  } else {
+    next.textContent = '다음 →';
+  }
+  // progress dots
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById('prog-' + i);
+    el.className = 'prog-step' + (i < currentPage ? ' done' : i === currentPage ? ' active' : '');
+    const dot = el.querySelector('.prog-dot');
+    const num = el.querySelector('.prog-num');
+    if (i < currentPage) {
+      dot.textContent = '✓';
+    } else {
+      dot.innerHTML = `<span class="prog-num">${i}</span>`;
+    }
+  }
+}
+
+function showPage(n) {
+  document.querySelectorAll('.page-view').forEach((p,i) => p.classList.toggle('active', i+1 === n));
+  currentPage = n;
+  updateNav();
+  window.scrollTo(0,0);
+}
+
+function goPrev() {
+  if (currentPage > 1) showPage(currentPage - 1);
+}
+
+function goNext() {
+  if (!validatePage(currentPage)) return;
+  collectPage(currentPage);
+
+  // Page 1 → check for existing entry by name
+  if (currentPage === 1) {
+    const en = sel.enName;
+    const ko = sel.koName;
+    const existing = getResponses().find(r => r.enName === en && r.koName === ko);
+    if (existing) {
+      openDupOverlay(existing);
+      return;
+    }
+  }
+
+  if (currentPage < 3) {
+    showPage(currentPage + 1);
+  } else {
+    collectPage(3);
+    renderReview(false);
+    document.getElementById('reviewOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+// ── VALIDATE ──
+function validatePage(p) {
+  clearAllErrs();
+  let ok = true;
+
+  if (p === 1) {
+    const en = document.getElementById('f-en').value.trim();
+    if (!en) { setErr('err-en','영문 이름을 입력해주세요'); ok=false; }
+    const ko = document.getElementById('f-ko').value.trim();
+    if (!ko) { setErr('err-ko','국문 이름을 입력해주세요'); ok=false; }
+  }
+
+  if (p === 2) {
+    if (!sel.gender)      { setErr('err-gender','성별을 선택해주세요'); ok=false; }
+    if (!sel.singletSize) { setErr('err-singlet-size','싱글렛 사이즈를 선택해주세요'); ok=false; }
+    const m1 = document.getElementById('f-smsg1').value.trim();
+    const m2 = document.getElementById('f-smsg2').value.trim();
+    if (m1 && !lineOk(m1)) { setErr('err-smsg1','한글 7자 또는 영문 15자 이내로 입력해주세요'); ok=false; }
+    if (m2 && !lineOk(m2)) { setErr('err-smsg2','한글 7자 또는 영문 15자 이내로 입력해주세요'); ok=false; }
+  }
+
+  if (p === 3) {
+    if (!sel.wbSize) { setErr('err-wb-size','바람막이 사이즈를 선택해주세요'); ok=false; }
+    const m1 = document.getElementById('f-wmsg1').value.trim();
+    const m2 = document.getElementById('f-wmsg2').value.trim();
+    if (m1 && !lineOk(m1)) { setErr('err-wmsg1','한글 7자 또는 영문 15자 이내로 입력해주세요'); ok=false; }
+    if (m2 && !lineOk(m2)) { setErr('err-wmsg2','한글 7자 또는 영문 15자 이내로 입력해주세요'); ok=false; }
+  }
+
+  if (!ok) {
+    const firstErr = document.querySelector('.field-err:not(:empty)');
+    if (firstErr) firstErr.closest('.q-card')?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  return ok;
+}
+
+function lineOk(s) {
+  return /[\uAC00-\uD7A3]/.test(s) ? [...s].length <= 7 : s.length <= 15;
+}
+
+// ── COLLECT ──
+function collectPage(p) {
+  if (p === 1) {
+    sel.enName = document.getElementById('f-en').value.trim().toUpperCase();
+    sel.koName = document.getElementById('f-ko').value.trim();
+  }
+  if (p === 2) {
+    sel.smsg1 = document.getElementById('f-smsg1').value.trim();
+    sel.smsg2 = document.getElementById('f-smsg2').value.trim();
+  }
+  if (p === 3) {
+    sel.wmsg1 = document.getElementById('f-wmsg1').value.trim();
+    sel.wmsg2 = document.getElementById('f-wmsg2').value.trim();
+  }
+}
+
+// ── GENDER ──
+function selectGender(g) {
+  sel.gender = g;
+  sel.singletSize = '';
+  document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('g-'+g).classList.add('selected');
+  renderSingletGrid(g);
+  clearErr('err-gender');
+}
+
+function renderSingletGrid(g) {
+  const grid = document.getElementById('singletSizeGrid');
+  const sizes = g === 'F' ? SIZES_F : SIZES_M;
+  grid.innerHTML = sizes.map(s =>
+    `<button type="button" class="size-btn${sel.singletSize===s?' selected':''}" onclick="selectSingletSize('${s}')">${s}</button>`
+  ).join('');
+  grid.className = 'size-grid ' + (g === 'F' ? 'size-grid-3' : 'size-grid-5');
+}
+
+function selectSingletSize(s) {
+  sel.singletSize = s;
+  document.querySelectorAll('#singletSizeGrid .size-btn').forEach(b => b.classList.toggle('selected', b.textContent===s));
+  clearErr('err-singlet-size');
+}
+
+function selectWbSize(s) {
+  sel.wbSize = s;
+  document.querySelectorAll('#wbSizeGrid .size-btn').forEach(b => b.classList.toggle('selected', b.textContent===s));
+  clearErr('err-wb-size');
+}
+
+// ── MESSAGE ──
+function onMsgInput(inp, key, ccId) {
+  const v = inp.value;
+  sel[key] = v;
+  const hasKo = /[\uAC00-\uD7A3]/.test(v);
+  const len = [...v].length;
+  const limit = hasKo ? 7 : 15;
+  const cc = document.getElementById(ccId);
+  cc.textContent = `${len} / ${limit}`;
+  cc.className = 'char-counter' + (len > limit ? ' over' : '');
+  clearErr('err-' + key.replace(/\d/,'msg').replace('msg',''));
+}
+
+function updatePreview() {
+  const m1 = document.getElementById('f-smsg1').value.trim();
+  const m2 = document.getElementById('f-smsg2').value.trim();
+  const p1 = document.getElementById('prev1');
+  const p2 = document.getElementById('prev2');
+  if (p1) p1.textContent = m1 || '—';
+  if (p2) p2.textContent = m2 || '';
+}
+
+// ── ERROR HELPERS ──
+function setErr(id, msg) { const e=document.getElementById(id); if(e) e.textContent=msg; }
+function clearErr(id) { const e=document.getElementById(id); if(e) e.textContent=''; }
+function clearAllErrs() { document.querySelectorAll('.field-err').forEach(e=>e.textContent=''); }
+
+// ── REVIEW ──
+function renderReview(isEditMode) {
+  const msgFmt = (m1, m2) => (m1||m2)
+    ? `<div class="rv-msg">${m1||''}${m1&&m2?' / ':''}${m2||''}</div>`
+    : `<span class="rv-none">미입력 (생략)</span>`;
+
+  const body = `
+    <div class="review-section-title">👤 이름</div>
+    <div class="review-row"><div class="rv-key">영문 이름</div><div class="rv-val en">${sel.enName}</div></div>
+    <div class="review-row"><div class="rv-key">국문 이름</div><div class="rv-val">${sel.koName}</div></div>
+    <div class="review-section-title">🎽 싱글렛</div>
+    <div class="review-row"><div class="rv-key">성별</div><div class="rv-val gtag">${sel.gender==='M'?'남성 ♂':'여성 ♀'}</div></div>
+    <div class="review-row"><div class="rv-key">사이즈</div><div class="rv-val tag">${sel.singletSize}</div></div>
+    <div class="review-row"><div class="rv-key">개인 문구</div>${msgFmt(sel.smsg1,sel.smsg2)}</div>
+    <div class="review-section-title">🧥 바람막이</div>
+    <div class="review-row"><div class="rv-key">사이즈</div><div class="rv-val tag">${sel.wbSize}</div></div>
+    <div class="review-row"><div class="rv-key">개인 문구</div>${msgFmt(sel.wmsg1,sel.wmsg2)}</div>
+  `;
+  document.getElementById('reviewBody').innerHTML = body;
+
+  // Submit button label
+  const btnSubmit = document.querySelector('#reviewOverlay .btn-submit');
+  if (btnSubmit) btnSubmit.textContent = isEditMode ? '수정 완료 ✓' : 'Submit ✓';
+}
+
+function closeReview() {
+  document.getElementById('reviewOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── SUBMIT ──
+function doSubmit() {
+  const responses = getResponses();
+  const dupIdx = responses.findIndex(r => r.enName===sel.enName && r.koName===sel.koName);
+  const entry = { ...sel, submittedAt: new Date().toLocaleString('ko-KR') };
+  if (dupIdx >= 0) {
+    responses[dupIdx] = entry; // always overwrite — user came through edit flow
+  } else {
+    responses.push(entry);
+  }
+  saveResponses(responses);
+  closeReview();
+  document.getElementById('view-survey').style.display = 'none';
+  document.getElementById('view-done').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── RESET ──
+function resetAll() {
+  Object.keys(sel).forEach(k => sel[k]='');
+  ['f-en','f-ko','f-smsg1','f-smsg2','f-wmsg1','f-wmsg2'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  ['scc1','scc2','wcc1','wcc2'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent='0 / 15';
+  });
+  document.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('selected'));
+  renderSingletGrid(null);
+  document.querySelectorAll('#wbSizeGrid .size-btn').forEach(b=>b.classList.remove('selected'));
+  updatePreview();
+  clearAllErrs();
+  currentPage = 1;
+  document.getElementById('view-done').classList.remove('active');
+  document.getElementById('view-survey').style.display = '';
+  showPage(1);
+}
+
+// ── SIZE MODAL ──
+const SINGLET_HTML = `
+  <div class="size-table-section">
+    <div class="table-section-label">♀ 여성</div>
+    <table><thead><tr><th>SIZE</th><th>총기장앞</th><th>총기장뒤</th><th>가슴</th><th>배</th></tr></thead>
+    <tbody>
+      <tr><td>S</td><td>60</td><td>62</td><td>39</td><td>43</td></tr>
+      <tr><td>M</td><td>62</td><td>64</td><td>41</td><td>45</td></tr>
+      <tr><td>L</td><td>64</td><td>66</td><td>44</td><td>48</td></tr>
+    </tbody></table>
+    <div class="size-table-note">단위: cm</div>
+  </div>
+  <div class="size-table-section">
+    <div class="table-section-label">♂ 남성</div>
+    <table><thead><tr><th>SIZE</th><th>총기장앞</th><th>총기장뒤</th><th>가슴</th><th>배</th></tr></thead>
+    <tbody>
+      <tr><td>S</td><td>56</td><td>60</td><td>43</td><td>44</td></tr>
+      <tr><td>M</td><td>58</td><td>62</td><td>46</td><td>47</td></tr>
+      <tr><td>L</td><td>60</td><td>64</td><td>48</td><td>49</td></tr>
+      <tr><td>XL</td><td>62</td><td>65</td><td>50</td><td>51</td></tr>
+      <tr><td>XXL</td><td>64</td><td>66</td><td>52</td><td>53</td></tr>
+    </tbody></table>
+    <div class="size-table-note">단위: cm</div>
+  </div>
+  <div class="table-tip">💡 러닝 싱글렛은 체형에 밀착되는 제품으로 평소 착용 사이즈보다 <strong>한 사이즈 크게</strong> 선택하시는 것을 권장합니다.</div>
+`;
+
+const WB_HTML = `
+  <div class="size-table-section">
+    <div class="table-section-label">바람막이 — 단면 CM / 1CM 오차 있을 수 있음</div>
+    <table><thead><tr><th>SIZE</th><th>어깨</th><th>가슴</th><th>배</th><th>팔길이</th><th>총길이</th></tr></thead>
+    <tbody>
+      <tr><td>XS</td><td>40</td><td>45</td><td>40</td><td>64</td><td>59</td></tr>
+      <tr><td>S</td><td>41</td><td>47</td><td>41</td><td>65</td><td>61</td></tr>
+      <tr><td>M</td><td>43</td><td>50</td><td>42</td><td>66</td><td>63</td></tr>
+      <tr><td>L</td><td>45</td><td>52</td><td>44</td><td>68</td><td>65</td></tr>
+      <tr><td>XL</td><td>47</td><td>54</td><td>46</td><td>70</td><td>67</td></tr>
+    </tbody></table>
+    <div class="size-table-note">단위: cm</div>
+  </div>
+  <div class="table-tip">💡 측정 방법: 팔을 자연스럽게 내린 상태에서 줄자로 해당 부위를 수평으로 측정하세요.</div>
+`;
+
+function openSizeModal(type) {
+  document.getElementById('sizeModalTitle').textContent = type==='singlet' ? '싱글렛 사이즈 가이드' : '바람막이 사이즈 가이드';
+  document.getElementById('sizeModalBody').innerHTML = type==='singlet' ? SINGLET_HTML : WB_HTML;
+  document.getElementById('sizeModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSizeModal() {
+  document.getElementById('sizeModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── ADMIN ──
+function openAdmin() {
+  document.getElementById('adminOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (adminUnlocked) showAdminPanel();
+}
+function closeAdmin() {
+  document.getElementById('adminOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function checkAdmin() {
+  if (document.getElementById('adminPw').value === ADMIN_PW) {
+    adminUnlocked = true;
+    document.getElementById('gateErr').textContent = '';
+    showAdminPanel();
+  } else {
+    document.getElementById('gateErr').textContent = '비밀번호가 올바르지 않습니다';
+  }
+}
+function showAdminPanel() {
+  document.getElementById('adminGate').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  renderAdminList();
+}
+function renderAdminList() {
+  const responses = getResponses();
+  const list = document.getElementById('adminList');
+  if (!responses.length) { list.innerHTML = '<div class="empty-admin">아직 응답이 없습니다.<br>Keep Running! 🏃</div>'; return; }
+  const gLabel = g => g==='M' ? '남' : '여';
+  const msgStr = (m1,m2) => m1||m2 ? `${m1||''}${m1&&m2?' / ':''}${m2||''}` : '없음';
+  list.innerHTML = responses.map((r,i) => `
+    <div class="admin-card">
+      <button class="ac-del" onclick="deleteResp(${i})">✕</button>
+      <div class="ac-top">
+        <div><span class="ac-name">${r.enName}</span><span class="ac-name-ko">${r.koName}</span></div>
+        <div class="ac-tags">
+          <span class="ac-tag">${gLabel(r.gender)}</span>
+          <span class="ac-tag">싱글렛 ${r.singletSize}</span>
+          <span class="ac-tag wb">바람막이 ${r.wbSize}</span>
+        </div>
+      </div>
+      <div class="ac-row">싱글렛 문구: <span>${msgStr(r.smsg1,r.smsg2)}</span></div>
+      <div class="ac-row">바람막이 문구: <span>${msgStr(r.wmsg1,r.wmsg2)}</span>
+        <span style="float:right;font-size:10px;color:var(--ink-light)">${r.submittedAt}</span>
+      </div>
+    </div>
+  `).join('');
+}
+function deleteResp(i) {
+  if (!confirm('이 응답을 삭제할까요?')) return;
+  const r=getResponses(); r.splice(i,1); saveResponses(r); renderAdminList(); showToast('삭제되었습니다');
+}
+function clearAllData() {
+  if (!confirm('모든 응답을 삭제하시겠습니까?')) return;
+  localStorage.removeItem(STORAGE_KEY); renderAdminList(); showToast('전체 삭제 완료');
+}
+
+// ── EXCEL ──
+function exportXlsx() {
+  const responses = getResponses();
+  if (!responses.length) { showToast('응답 데이터가 없습니다'); return; }
+  if (typeof XLSX !== 'undefined') { _doExport(responses); }
+  else {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload = () => _doExport(responses);
+    s.onerror = () => { showToast('라이브러리 로드 실패. CSV로 저장합니다.'); _exportCSV(responses); };
+    document.head.appendChild(s);
+  }
+}
+function _doExport(responses) {
+  const headers = ['번호','영문 이름','국문 이름','성별','싱글렛 사이즈','싱글렛 문구 1','싱글렛 문구 2','바람막이 사이즈','바람막이 문구 1','바람막이 문구 2','제출 시간'];
+  const rows = responses.map((r,i) => [
+    i+1, r.enName, r.koName,
+    r.gender==='M'?'남성':'여성',
+    r.singletSize, r.smsg1||'', r.smsg2||'',
+    r.wbSize, r.wmsg1||'', r.wmsg2||'',
+    r.submittedAt
+  ]);
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([headers,...rows]);
+  ws['!cols'] = [{wch:5},{wch:18},{wch:10},{wch:8},{wch:10},{wch:18},{wch:18},{wch:10},{wch:18},{wch:18},{wch:22}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Finishers 설문');
+  XLSX.writeFile(wb, `Finishers_단체복설문_${new Date().toISOString().slice(0,10)}.xlsx`);
+  showToast('엑셀 다운로드 완료!');
+}
+function _exportCSV(responses) {
+  const h=['번호','영문 이름','국문 이름','성별','싱글렛 사이즈','싱글렛 문구1','싱글렛 문구2','바람막이 사이즈','바람막이 문구1','바람막이 문구2','제출시간'];
+  const rows = responses.map((r,i)=>[i+1,r.enName,r.koName,r.gender==='M'?'남성':'여성',r.singletSize,r.smsg1||'',r.smsg2||'',r.wbSize,r.wmsg1||'',r.wmsg2||'',r.submittedAt].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const csv='\uFEFF'+[h.join(','),...rows].join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download=`Finishers_설문_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+}
+
+// ── DUPLICATE OVERLAY ──
+let _dupExisting = null; // holds the found existing record
+
+function openDupOverlay(existing) {
+  _dupExisting = existing;
+  document.getElementById('dupOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDupOverlay() {
+  document.getElementById('dupOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function dupAction(action) {
+  closeDupOverlay();
+  if (action === 'view') {
+    // Show existing entry read-only
+    openViewExisting(_dupExisting);
+  } else {
+    // Pre-fill form with existing data and go to page 2
+    fillFormFromExisting(_dupExisting);
+    showPage(2);
+  }
+}
+
+// ── VIEW EXISTING ──
+function openViewExisting(r) {
+  const msgFmt = (m1, m2) => (m1||m2)
+    ? `<div class="rv-msg">${m1||''}${m1&&m2?' / ':''}${m2||''}</div>`
+    : `<span class="rv-none">미입력 (생략)</span>`;
+
+  document.getElementById('viewExistingBody').innerHTML = `
+    <div class="review-section-title">👤 이름</div>
+    <div class="review-row"><div class="rv-key">영문 이름</div><div class="rv-val en">${r.enName}</div></div>
+    <div class="review-row"><div class="rv-key">국문 이름</div><div class="rv-val">${r.koName}</div></div>
+    <div class="review-section-title">🎽 싱글렛</div>
+    <div class="review-row"><div class="rv-key">성별</div><div class="rv-val gtag">${r.gender==='M'?'남성 ♂':'여성 ♀'}</div></div>
+    <div class="review-row"><div class="rv-key">사이즈</div><div class="rv-val tag">${r.singletSize}</div></div>
+    <div class="review-row"><div class="rv-key">개인 문구</div>${msgFmt(r.smsg1,r.smsg2)}</div>
+    <div class="review-section-title">🧥 바람막이</div>
+    <div class="review-row"><div class="rv-key">사이즈</div><div class="rv-val tag">${r.wbSize}</div></div>
+    <div class="review-row"><div class="rv-key">개인 문구</div>${msgFmt(r.wmsg1,r.wmsg2)}</div>
+    <div style="padding:12px 0 4px;font-size:10px;color:var(--ink-light);text-align:right">최종 제출: ${r.submittedAt}</div>
+  `;
+  document.getElementById('viewExistingOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeViewExisting() {
+  document.getElementById('viewExistingOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function startEditFromView() {
+  closeViewExisting();
+  fillFormFromExisting(_dupExisting);
+  showPage(2);
+}
+
+// ── PRE-FILL FORM FROM EXISTING RECORD ──
+function fillFormFromExisting(r) {
+  // Copy into sel
+  Object.assign(sel, r);
+  // Gender
+  selectGender(r.gender);
+  // Singlet size (grid already re-rendered by selectGender)
+  sel.singletSize = r.singletSize;
+  document.querySelectorAll('#singletSizeGrid .size-btn').forEach(b =>
+    b.classList.toggle('selected', b.textContent === r.singletSize)
+  );
+  // Singlet messages
+  const sm1 = document.getElementById('f-smsg1');
+  const sm2 = document.getElementById('f-smsg2');
+  if (sm1) { sm1.value = r.smsg1||''; onMsgInput(sm1,'smsg1','scc1'); }
+  if (sm2) { sm2.value = r.smsg2||''; onMsgInput(sm2,'smsg2','scc2'); }
+  updatePreview();
+  // WB size
+  sel.wbSize = r.wbSize;
+  document.querySelectorAll('#wbSizeGrid .size-btn').forEach(b =>
+    b.classList.toggle('selected', b.textContent === r.wbSize)
+  );
+  // WB messages
+  const wm1 = document.getElementById('f-wmsg1');
+  const wm2 = document.getElementById('f-wmsg2');
+  if (wm1) { wm1.value = r.wmsg1||''; onMsgInput(wm1,'wmsg1','wcc1'); }
+  if (wm2) { wm2.value = r.wmsg2||''; onMsgInput(wm2,'wmsg2','wcc2'); }
+}
+
+// ── STORAGE ──
+function getResponses() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]; } catch { return []; } }
+function saveResponses(r) { localStorage.setItem(STORAGE_KEY, JSON.stringify(r)); }
+
+// ── TOAST ──
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') { closeSizeModal(); closeReview(); closeAdmin(); closeDupOverlay(); closeViewExisting(); }
+  if (e.key==='Enter' && document.activeElement.closest('#adminGate')) checkAdmin();
+});
+</script>
+</body>
+</html>
